@@ -1,0 +1,171 @@
+ /**
+      
+     
+    //
+    if(huegelVorhanden("rechts")) {  S. 49 Nr. 2a
+        drehe("rechts");
+    } 
+    //
+    
+    
+    
+    //
+     if(huegelVorhanden("rechts")) {         Nr. 2b
+        drehe("rechts");
+    } else if(huegelVorhanden("links")) {
+        drehe("links");
+    } else {
+        setzeMarke();
+    }
+    //
+    
+    
+    
+    //
+    if(markeVorhanden()) {     Nr. 2c
+        entferneMarke();
+    } else {
+        setzeMarke();
+    }
+    //
+    
+    
+    
+    //
+   fahre();             // Nr. 4
+    while(markeVorhanden()){ 
+    if(!huegelVorhanden("vorne")) {
+        fahre();
+    } else if (huegelVorhanden("vorne")) {
+        drehe("links");
+    }
+}
+//
+
+
+
+//
+setzeMarke();           //Nr.5 a
+while(!gesteinVorhanden()) {
+    if(!huegelVorhanden("vorne")) {
+        fahre();
+    } else if (huegelVorhanden("vorne")) {
+        drehe("links");
+        fahre();
+        drehe("rechts");
+        fahre();
+        while(huegelVorhanden("rechts")) { //Nr.5 b
+        fahre();
+    }
+        drehe("rechts");
+        fahre();
+        drehe("links");
+    }
+}
+analysiereGestein();
+drehe("links");           //dreht um und kehrt zurück Nr.5 c
+drehe("links");
+while(!markeVorhanden()) {
+    if(!huegelVorhanden("vorne")) {
+        fahre();
+    } else if (huegelVorhanden("vorne")) {
+        drehe("links");
+        fahre();
+        drehe("rechts");
+        fahre();
+        while(huegelVorhanden("rechts")) {   //umfährt hügel
+        fahre();
+    }
+        drehe("rechts");
+        fahre();
+        drehe("links");
+    }
+}
+drehe("links");
+drehe("links");
+//
+
+
+
+//
+while (!gesteinVorhanden()) {                  // Nr. 3 S. 59
+    if (!huegelVorhanden("links")) {
+        drehe("links");
+        fahre();
+    } else if (!huegelVorhanden("vorne")) {
+        fahre();
+    } else if (!huegelVorhanden("rechts")) {
+        drehe ("rechts");
+        fahre();
+    }
+}
+analysiereGestein();
+//
+
+
+
+//
+if (huegelVorhanden("links") && huegelVorhanden("rechts") && !gesteinVorhanden()) {     // S. 59 Nr. 2 c
+setzeMarke();
+}
+//
+
+
+
+//
+int i = 0;             // Nr.2 Klausurblatt
+setzeMarke();
+while (!huegelVorhanden("vorne")) {    
+    if (gesteinVorhanden()) {
+        analysiereGestein();
+        fahre();
+        i++;
+    } else {
+        fahre();
+        i++;
+    }
+}
+dreheUm();
+while(!markeVorhanden()) {
+        fahre();
+    }
+    dreheUm();
+//
+
+
+
+//
+int x = 10;          // Nr. 1 Klausurblatt
+int y = 10;
+int xahl = 0;
+int yahl = 0;
+
+while(yahl < y) {
+while(xahl < x) {
+    setzeMarke();
+    fahre();
+    xahl++;
+}
+drehe("rechts");
+fahre();
+drehe("rechts");
+fahre();
+xahl = 0;
+yahl++;
+if (yahl < y) {
+while(xahl < x) {
+    setzeMarke();
+    fahre();
+    xahl++;
+}
+drehe("links");
+fahre();
+drehe("links");
+fahre();
+xahl = 0;
+yahl++;
+}
+}
+//
+
+*/
