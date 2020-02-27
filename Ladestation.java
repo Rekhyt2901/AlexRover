@@ -18,6 +18,21 @@ public class Ladestation extends Actor
     }  
     
     public Ladestation() {
+    }
+    
+    protected void addedToWorld(World world) {
         setImage("images/LadestationCOOL.png");
+        Planet.Tiles[getX()][getY()].setTemperatur(5);
+        
+        Planet.Tiles[getX() - 1][getY() + 1].setTemperatur(5);
+        Planet.Tiles[getX() - 1][getY()].setTemperatur(5);
+        Planet.Tiles[getX() - 1][getY() - 1].setTemperatur(5);
+        
+        Planet.Tiles[getX()][getY() - 1].setTemperatur(5);
+        Planet.Tiles[getX()][getY() + 1].setTemperatur(5);
+        
+        Planet.Tiles[getX() + 1][getY() + 1].setTemperatur(5);
+        Planet.Tiles[getX() + 1][getY()].setTemperatur(5);
+        Planet.Tiles[getX() + 1][getY() - 1].setTemperatur(5);
     }
 }

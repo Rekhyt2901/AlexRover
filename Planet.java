@@ -7,24 +7,17 @@ import java.io.IOException;
 import java.io.LineNumberReader;
 import java.io.FileReader;
 
-/**
- * Die einzigen aktiven Akteure in der Roboterwelt sind die Roboter. Die Welt
- * besteht aus 14 * 10 Feldern.
- */
-
 public class Planet extends World {
     private static int zellenGroesse = 50;
-    static int x;
-    static int y;
-    private static Integer temperatur;
-    private static Rover.TemperaturDisplay temperaturAnzeige;
-    public Rover rover = new Rover("Vulkanschlucker");
-
-    /**
-     * Erschaffe eine Welt mit 15 * 12 Zellen.
-     */
+    private static int x = 21;
+    private static int y = 12;
+    
+    public static Tile[][] Tiles = new Tile[x][y];
+    public RoverAufgaben rover = new RoverAufgaben();
+    
     public Planet() {
-        super(21, 12, zellenGroesse);
+        super(x, y, zellenGroesse);
+        prepareTiles();
         prepare();
         prepareHuegel();
         prepareGestein();
@@ -32,18 +25,22 @@ public class Planet extends World {
     }
 
     /**
-       * Prepare the world for the start of the program. That is: create the initial
+     * Prepare the world for the start of the program. That is: create the initial
      * objects and add them to the world.
      */
     public void prepare() {
         setBackground("images/bodenCOOL.png");
         setPaintOrder(String.class, Rover.class, Marke.class, Gestein.class, Huegel.class);
         Greenfoot.setSpeed(50);
-        temperatur = Greenfoot.getRandomNumber(88) - 73;
-        temperaturAnzeige = rover.new TemperaturDisplay();
-        this.addObject(temperaturAnzeige, 30, 0);
-        temperaturAnzeige.anzeigen(temperatur.toString() + "°C");
         addObject(rover, 0, 6);
+    }
+
+    public void prepareTiles() {
+        for (int i = 0; i < Tiles.length; i++) {
+            for (int j = 0; j < Tiles[i].length; j++) {
+                Tiles[i][j] = new Tile(i, j);
+            }
+        }
     }
 
     private void prepareHuegel() {
@@ -133,12 +130,11 @@ public class Planet extends World {
         }
     }
 
-    public static Integer getTemperature() {
-        return temperatur;
+    public static int getX() {
+        return x;
     }
 
-    public static void setTemperature(int t) {
-        temperatur = t;
+    public static int getY() {
+        return y;
     }
-
 }

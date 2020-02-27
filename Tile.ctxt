@@ -1,0 +1,13 @@
+#BlueJ class context
+comment0.target=Tile
+comment1.params=
+comment1.target=void\ act()
+comment2.params=x\ y
+comment2.target=Tile(int,\ int)
+comment3.params=
+comment3.target=java.lang.Integer\ getTemperatur()
+comment4.params=
+comment4.target=int\ getX()
+comment5.params=
+comment5.target=int\ getY()
+numComments=6
