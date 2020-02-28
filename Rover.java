@@ -4,6 +4,7 @@ public class Rover extends Actor {
     protected int Energie = 100;
     protected Integer strecke = 0;
     protected char funkFrequenz;
+    protected int kaltCounter = 0;
     protected boolean systemOK = true;
 
     private GroﬂesDisplay anzeige;
@@ -29,19 +30,28 @@ public class Rover extends Actor {
             anzeige.anzeigen("Keine Ladestation vorhanden");
         }
     }
-    
+
     public void aufw‰rmen(int zielTemperatur) {
         while (Planet.Tiles[getX()][getY()].getTemperatur() < zielTemperatur) {
             Planet.Tiles[getX()][getY()].setTemperatur(Planet.Tiles[getX()][getY()].getTemperatur() + 1);
             temperaturAnzeige.anzeigen(Planet.Tiles[getX()][getY()].getTemperatur().toString() + "∞C");
             Energie--;
             energieAnzeige.anzeigen(getEnergie() + "%");
+            if (Planet.Tiles[getX()][getY()].getTemperatur() > -50)
+                Planet.Tiles[getX()][getY()].setImage("images/bodenCOOL.png");
+            if (Planet.Tiles[getX()][getY()].getTemperatur() > 0)
+                Planet.Tiles[getX()][getY()].setImage("images/bodenWarm.png");
             Greenfoot.delay(3);
         }
+        kaltCounter = 0;
+        systemOK = true;
+        Planet.Tiles[0][0].getImage().clear();
+        drawStatus();
+        setImage("images/roverCOOL.png");
     }
 
     public void fahre() {
-        if (Energie > 0 && Planet.Tiles[getX()][getY()].getTemperatur() > -50) {
+        if (Energie > 0 && systemOK) {
             int posX = getX();
             int posY = getY();
 
@@ -62,18 +72,26 @@ public class Rover extends Actor {
             energieAnzeige.anzeigen(getEnergie() + "%");
             streckenAnzeige.anzeigen(getStrecke().toString() + "km");
             temperaturAnzeige.anzeigen(Planet.Tiles[getX()][getY()].getTemperatur().toString() + "∞C");
+            if (Planet.Tiles[getX()][getY()].getTemperatur() <= -50) {
+                kaltCounter++;
+                if (kaltCounter >= 3) {
+                    systemOK = false;
+                    setImage("images/roverKalt.png");
+                }
+                drawStatus();
+            }
         } else {
-            if (Energie <= 0 && Planet.Tiles[getX()][getY()].getTemperatur() <= -50)
+            if (Energie <= 0 && !systemOK)
                 anzeige.anzeigen("Keine Energie und zu niedrige Umgebungstemperatur.");
             else if (Energie <= 0)
                 anzeige.anzeigen("Nicht genug Energie.");
-            else if (Planet.Tiles[getX()][getY()].getTemperatur() <= -50)
+            else if (!systemOK)
                 anzeige.anzeigen("Umgebungstemperatur zu niedrig.");
         }
     }
 
     public void drehe(String richtung) {
-        if (Energie > 0 && Planet.Tiles[getX()][getY()].getTemperatur() > -50) {
+        if (Energie > 0 && systemOK) {
             if (richtung == "rechts") {
                 setRotation(getRotation() + 90);
             } else if (richtung == "links") {
@@ -156,7 +174,7 @@ public class Rover extends Actor {
 
     public boolean LadestationVorhanden(String richtung) {
         int rot = getRotation();
-        
+
         if (richtung == "vorne" && rot == 0 || richtung == "rechts" && rot == 270 || richtung == "links" && rot == 90) {
             if (getOneObjectAtOffset(1, 0, Ladestation.class) != null) {
                 return true;
@@ -192,7 +210,7 @@ public class Rover extends Actor {
     }
 
     public void setzeMarke() {
-        if (Energie > 0 && Planet.Tiles[getX()][getY()].getTemperatur() > -50) {
+        if (Energie > 0 && systemOK) {
             getWorld().addObject(new Marke(), getX(), getY());
         } else {
             if (Energie <= 0 && Planet.Tiles[getX()][getY()].getTemperatur() <= -50)
@@ -205,7 +223,7 @@ public class Rover extends Actor {
     }
 
     public void entferneMarke() {
-        if (Energie > 0 && Planet.Tiles[getX()][getY()].getTemperatur() > -50) {
+        if (Energie > 0 && systemOK) {
             if (markeVorhanden()) {
                 removeTouching(Marke.class);
             }
@@ -223,7 +241,7 @@ public class Rover extends Actor {
 
     public void analysiereGestein() {
 
-        if (Energie > 0 && Planet.Tiles[getX()][getY()].getTemperatur() > -50) {
+        if (Energie > 0 && systemOK) {
             if (gesteinVorhanden()) {
                 nachricht("Gestein untersucht! Wassergehalt ist "
                         + ((Gestein) getOneIntersectingObject(Gestein.class)).getWassergehalt() + "%.");
@@ -263,7 +281,7 @@ public class Rover extends Actor {
         energieAnzeige = new KleinesDisplay();
         streckenAnzeige = new KleinesDisplay();
         temperaturAnzeige = new KleinesDisplay();
-        
+
         world.addObject(anzeige, 10, 0);
         world.addObject(energieAnzeige, 1, 0);
         world.addObject(streckenAnzeige, 3, 0);
@@ -275,8 +293,33 @@ public class Rover extends Actor {
         energieAnzeige.anzeigen(getEnergie() + "%");
         streckenAnzeige.anzeigen(strecke.toString() + "km");
         temperaturAnzeige.anzeigen(Planet.Tiles[getX()][getY()].getTemperatur().toString() + "∞C");
+        drawStatus();
     }
 
+    public void drawStatus() {
+        if (systemOK) {
+            Planet.Tiles[0][0].getImage().setColor(new Color(0, 255, 0));
+        } else {
+            Planet.Tiles[0][0].getImage().setColor(new Color(255, 0, 0));    
+        }
+        Planet.Tiles[0][0].getImage().fillOval(14, 12, 25, 25);
+        Planet.Tiles[0][0].getImage().setColor(new Color(0, 0, 0));
+        Planet.Tiles[0][0].getImage().drawOval(14, 12, 25, 25);
+        
+        Planet.Tiles[0][0].getImage().setColor(new Color(0, 128, 255));
+        if (kaltCounter >= 1)
+            Planet.Tiles[0][0].getImage().fillRect(8, 32, 8, 8);
+        if (kaltCounter >= 2)
+            Planet.Tiles[0][0].getImage().fillRect(21, 32, 8, 8);
+        if (kaltCounter >= 3)
+            Planet.Tiles[0][0].getImage().fillRect(34, 32, 8, 8);
+        
+        Planet.Tiles[0][0].getImage().setColor(new Color(0, 0, 0));
+        Planet.Tiles[0][0].getImage().drawRect(8, 32, 8, 8);
+        Planet.Tiles[0][0].getImage().drawRect(21, 32, 8, 8);
+        Planet.Tiles[0][0].getImage().drawRect(34, 32, 8, 8);
+    }
+    
     public int getEnergie() {
         return Energie;
     }
@@ -300,11 +343,11 @@ public class Rover extends Actor {
     public void setFunkFrequenz(char c) {
         funkFrequenz = c;
     }
-    
+
     public boolean getSystemOK() {
         return systemOK;
     }
-    
+
     public void setSystemOK(boolean sysOK) {
         systemOK = sysOK;
     }
