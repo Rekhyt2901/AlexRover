@@ -40,7 +40,7 @@ public class Rover extends Actor {
             if (Planet.Tiles[getX()][getY()].getTemperatur() > -50)
                 Planet.Tiles[getX()][getY()].setImage("images/bodenCOOL.png");
             if (Planet.Tiles[getX()][getY()].getTemperatur() > 0)
-                Planet.Tiles[getX()][getY()].setImage("images/bodenWarm.png");
+                Planet.Tiles[getX()][getY()].setImage("images/bodenWarmCOOL.png");
             Greenfoot.delay(3);
         }
         kaltCounter = 0;
@@ -78,6 +78,10 @@ public class Rover extends Actor {
                     systemOK = false;
                     setImage("images/roverKalt.png");
                 }
+                drawStatus();
+            } else {
+                kaltCounter = 0;
+                Planet.Tiles[0][0].getImage().clear();
                 drawStatus();
             }
         } else {
@@ -396,7 +400,7 @@ public class Rover extends Actor {
 
         public void loeschen() {
             getImage().clear();
-            setImage("images/tempNachricht.png");
+            setImage("images/kleineNachricht.png");
         }
     }
 }

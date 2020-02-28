@@ -33,17 +33,17 @@ public class Ladestation extends Actor {
 		Planet.Tiles[getX() + 1][getY()].setTemperatur(5);
 		Planet.Tiles[getX() + 1][getY() - 1].setTemperatur(5);
 
-		Planet.Tiles[getX()][getY()].setImage("images/bodenWarm.png");
+		Planet.Tiles[getX()][getY()].setImage("images/bodenWarmCOOL.png");
 
-		Planet.Tiles[getX() - 1][getY() + 1].setImage("images/bodenWarm.png");
-		Planet.Tiles[getX() - 1][getY()].setImage("images/bodenWarm.png");
-		Planet.Tiles[getX() - 1][getY() - 1].setImage("images/bodenWarm.png");
+		Planet.Tiles[getX() - 1][getY() + 1].setImage("images/bodenWarmCOOL.png");
+		Planet.Tiles[getX() - 1][getY()].setImage("images/bodenWarmCOOL.png");
+		Planet.Tiles[getX() - 1][getY() - 1].setImage("images/bodenWarmCOOL.png");
 
-		Planet.Tiles[getX()][getY() - 1].setImage("images/bodenWarm.png");
-		Planet.Tiles[getX()][getY() + 1].setImage("images/bodenWarm.png");
+		Planet.Tiles[getX()][getY() - 1].setImage("images/bodenWarmCOOL.png");
+		Planet.Tiles[getX()][getY() + 1].setImage("images/bodenWarmCOOL.png");
 
-		Planet.Tiles[getX() + 1][getY() + 1].setImage("images/bodenWarm.png");
-		Planet.Tiles[getX() + 1][getY()].setImage("images/bodenWarm.png");
-		Planet.Tiles[getX() + 1][getY() - 1].setImage("images/bodenWarm.png");
+		Planet.Tiles[getX() + 1][getY() + 1].setImage("images/bodenWarmCOOL.png");
+		Planet.Tiles[getX() + 1][getY()].setImage("images/bodenWarmCOOL.png");
+		Planet.Tiles[getX() + 1][getY() - 1].setImage("images/bodenWarmCOOL.png");
 	}
 }

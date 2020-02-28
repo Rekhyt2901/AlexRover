@@ -17,11 +17,11 @@ public class Tile extends Actor {
 
 	public void addedToWorld(World world) {
 		if (temperatur > 0)
-			setImage("images/bodenWarm.png");
+			setImage("images/bodenWarmCOOL.png");
 		else if (temperatur > -50)
 			setImage("images/bodenCOOL.png");
 		else
-			setImage("images/bodenKalt.png");
+			setImage("images/bodenKaltCOOL.png");
 		world = getWorld();
 		world.addObject(this, x, y);
 	}
