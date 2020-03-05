@@ -13,10 +13,13 @@ public class Planet extends World {
 	private static int y = 12;
 
 	public static Tile[][] Tiles = new Tile[x][y];
-	public ExtendedRover rover = new ExtendedRover();
+	public ExtendedRover rover = new ExtendedRover("Alex", 'a');
 	public Ladestation ladestation0 = new Ladestation();
 	public Ladestation ladestation1 = new Ladestation();
 	public Ladestation ladestation2 = new Ladestation();
+	public Marsianer marsianer1 = new Marsianer();
+	public Marsianer marsianer2 = new Marsianer();
+	public Marsianer marsianer3 = new Marsianer();
 
 	public Planet() {
 		super(x, y, zellenGroesse);
@@ -39,6 +42,9 @@ public class Planet extends World {
 		addObject(ladestation0, 12, 9);
 		addObject(ladestation1, 15, 6);
 		addObject(ladestation2, 12, 3);
+		addObject(marsianer1, 11, 9);
+		addObject(marsianer2, 14, 6);
+		addObject(marsianer3, 11, 3);
 	}
 
 	public void prepareTiles() {

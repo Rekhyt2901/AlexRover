@@ -5,11 +5,11 @@ import java.io.File;
 
 public class ExtendedRover extends Rover {
     public void act() {
-        fahre();
+        super.act();
     }
 
-    public ExtendedRover() {
-        
+    public ExtendedRover(String name, char funkFrequenz) {
+        super(name, funkFrequenz);
     }
 
     public void fahre(int x) {
@@ -19,11 +19,6 @@ public class ExtendedRover extends Rover {
         }
     }
     
-    public void dreheUm() {
-        drehe("rechts");
-        drehe("rechts");
-    }
-
     public void umrundenRechts() {
         drehe("rechts");
         fahre();
@@ -181,16 +176,6 @@ public class ExtendedRover extends Rover {
             }
         } // Ende von Switch
         nachricht("Falsche Eingabe: " + richt + ".");
-        return false;
-    }
-
-    public boolean huegelVorhandenHinten() {
-        dreheUm();
-        if (huegelVorhanden("vorne")) {
-            dreheUm();
-            return true;
-        }
-        dreheUm();
         return false;
     }
 

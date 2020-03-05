@@ -7,31 +7,31 @@ import greenfoot.*; // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @version (a version number or a date)
  */
 public class Gestein extends Actor {
-	private String farbe;
-	private int wassergehalt;
+    private String farbe;
+    private int wassergehalt;
 
-	public Gestein() {
-		wassergehalt = Greenfoot.getRandomNumber(20);
+    public Gestein() {
+        wassergehalt = Greenfoot.getRandomNumber(20);
 
-		if (Greenfoot.getRandomNumber(2) == 0) {
-			farbe = "rot";
-			setImage("images/gesteinRotCOOL.png");
-		} else {
-			farbe = "blau";
-			setImage("images/gesteinBlauCOOL.png");
-		}
-	}
+        if (Greenfoot.getRandomNumber(2) == 0) {
+            farbe = "rot";
+            setImage("images/gesteinRotCOOL.png");
+        } else {
+            farbe = "blau";
+            setImage("images/gesteinBlauCOOL.png");
+        }
+    }
 
-	/**
-	 * Act - do whatever the Gestein wants to do. This method is called whenever the
-	 * 'Act' or 'Run' button gets pressed in the environment.
-	 */
-	public void act() {
+    /**
+     * Act - do whatever the Gestein wants to do. This method is called whenever the
+     * 'Act' or 'Run' button gets pressed in the environment.
+     */
+    public void act() {
+        
+    }
 
-	}
-
-	public int getWassergehalt() {
-		return wassergehalt;
-	}
+    public int getWassergehalt() {
+        return wassergehalt;
+    }
 
 }

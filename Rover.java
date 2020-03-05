@@ -1,26 +1,78 @@
 import greenfoot.*; // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+    
 public class Rover extends Actor {
     protected int Energie = 100;
     protected Integer strecke = 0;
     protected char funkFrequenz;
     protected int kaltCounter = 0;
     protected boolean systemOK = true;
-
+    protected String name;
+    
     private GroﬂesDisplay anzeige;
     private KleinesDisplay temperaturAnzeige;
     private KleinesDisplay streckenAnzeige;
     private KleinesDisplay energieAnzeige;
 
+    int fps = 10;           //makes Game run at same Speed on every Device.
+    double timePerTick = 1000000000 / fps;
+    double delta = 0;
+    long now;
+    long lastTime = System.nanoTime();
+
     public void act() {
-        
+        now = System.nanoTime();
+        delta += (now - lastTime) / timePerTick;
+        lastTime = now;
+        if(delta >= 1) {
+            if (Greenfoot.isKeyDown("w")) {
+                turnTowards(getX(), getY() - 1);
+                fahre();
+            }
+            if (Greenfoot.isKeyDown("a")) {
+                turnTowards(getX() - 1, getY());
+                fahre();
+            }
+            if (Greenfoot.isKeyDown("s")) {
+                turnTowards(getX(), getY() + 1);
+                fahre();
+            }
+            if (Greenfoot.isKeyDown("d")) {
+                turnTowards(getX() + 1, getY());
+                fahre();
+            }
+            if(Greenfoot.isKeyDown("space")) {
+                aufladen();
+            }
+            if(Greenfoot.isKeyDown("enter")) {
+                aufw‰rmen(1);
+            }
+            if(Greenfoot.isKeyDown("m")) {
+                setzeMarke();
+            }
+            if(Greenfoot.isKeyDown("n")) {
+                entferneMarke();
+            }
+            if(Greenfoot.isKeyDown("g")) {
+                analysiereGestein();
+            }
+            if (Greenfoot.isKeyDown("f")) {
+                temporaryMethod();
+            }
+            delta--;
+        }
     }
 
-    public Rover() {
+    public void temporaryMethod() {
+        
+    }
+    
+    public Rover(String name, char funkFrequenz) {
+        this.name = name;
+        this.funkFrequenz = funkFrequenz;
     }
 
     public void aufladen() {
-        if (LadestationVorhanden("links") || LadestationVorhanden("rechts") || LadestationVorhanden("vorne")) {
+        if (LadestationInUmkreis()) {
             while (Energie < 100) {
                 Energie++;
                 energieAnzeige.anzeigen(getEnergie() + "%");
@@ -51,7 +103,7 @@ public class Rover extends Actor {
     }
 
     public void fahre() {
-        if (Energie > 0 && systemOK) {
+        if (Energie > 0 && systemOK && !LadestationVorhanden("vorne")) {
             int posX = getX();
             int posY = getY();
 
@@ -67,6 +119,7 @@ public class Rover extends Actor {
             if (posX == getX() && posY == getY() && !huegelVorhanden("vorne")) {
                 nachricht("Ich kann mich nicht bewegen");
             }
+            
             Energie--;
             strecke++;
             energieAnzeige.anzeigen(getEnergie() + "%");
@@ -76,13 +129,16 @@ public class Rover extends Actor {
                 kaltCounter++;
                 if (kaltCounter >= 3) {
                     systemOK = false;
-                    setImage("images/roverKalt.png");
+                    setImage("images/Uncool/roverKalt.png");
                 }
                 drawStatus();
             } else {
                 kaltCounter = 0;
                 Planet.Tiles[0][0].getImage().clear();
                 drawStatus();
+            }
+            if (getOneIntersectingObject(Marsianer.class) != null) {
+                getWorld().removeObject(this);
             }
         } else {
             if (Energie <= 0 && !systemOK)
@@ -113,6 +169,11 @@ public class Rover extends Actor {
             else if (Planet.Tiles[getX()][getY()].getTemperatur() <= -50)
                 anzeige.anzeigen("Umgebungstemperatur zu niedrig.");
         }
+    }
+    
+    public void dreheUm() {
+        drehe("rechts");
+        drehe("rechts");
     }
 
     public boolean gesteinVorhanden() {
@@ -212,6 +273,42 @@ public class Rover extends Actor {
 
         return false;
     }
+    
+    public boolean huegelVorhandenHinten() {
+        dreheUm();
+        if (huegelVorhanden("vorne")) {
+            dreheUm();
+            return true;
+        }
+        dreheUm();
+        return false;
+    }
+    
+    public boolean LadestationVorhandenHinten() {
+        dreheUm();
+        if (LadestationVorhanden("vorne")) {
+            dreheUm();
+            return true;
+        }
+        dreheUm();
+        return false;
+    }
+    
+    public boolean LadestationInUmkreis() {
+        if (Planet.Tiles[getX()][getY()].getHasLadestation()
+            || Planet.Tiles[getX() + 1][getY() + 1].getHasLadestation()
+            ||Planet.Tiles[getX() + 1][getY()].getHasLadestation()
+            ||Planet.Tiles[getX() + 1][getY() - 1].getHasLadestation()
+            ||Planet.Tiles[getX()][getY() + 1].getHasLadestation()
+            ||Planet.Tiles[getX()][getY() - 1].getHasLadestation()
+            ||Planet.Tiles[getX() - 1][getY() + 1].getHasLadestation()
+            ||Planet.Tiles[getX() - 1][getY()].getHasLadestation()
+            ||Planet.Tiles[getX() - 1][getY() - 1].getHasLadestation())
+            return true;
+        else
+            return false;
+        
+    }
 
     public void setzeMarke() {
         if (Energie > 0 && systemOK) {
@@ -244,7 +341,6 @@ public class Rover extends Actor {
     }
 
     public void analysiereGestein() {
-
         if (Energie > 0 && systemOK) {
             if (gesteinVorhanden()) {
                 nachricht("Gestein untersucht! Wassergehalt ist "
@@ -290,9 +386,7 @@ public class Rover extends Actor {
         world.addObject(energieAnzeige, 1, 0);
         world.addObject(streckenAnzeige, 3, 0);
         world.addObject(temperaturAnzeige, 30, 0);
-        if (getY() == 0) {
-            setLocation(getX(), 1);
-        }
+    
         anzeige.anzeigen("Ihr wisst schon dass ich cool bin?");
         energieAnzeige.anzeigen(getEnergie() + "%");
         streckenAnzeige.anzeigen(strecke.toString() + "km");
@@ -304,12 +398,12 @@ public class Rover extends Actor {
         if (systemOK) {
             Planet.Tiles[0][0].getImage().setColor(new Color(0, 255, 0));
         } else {
-            Planet.Tiles[0][0].getImage().setColor(new Color(255, 0, 0));    
+            Planet.Tiles[0][0].getImage().setColor(new Color(255, 0, 0));
         }
         Planet.Tiles[0][0].getImage().fillOval(14, 12, 25, 25);
         Planet.Tiles[0][0].getImage().setColor(new Color(0, 0, 0));
         Planet.Tiles[0][0].getImage().drawOval(14, 12, 25, 25);
-        
+
         Planet.Tiles[0][0].getImage().setColor(new Color(0, 128, 255));
         if (kaltCounter >= 1)
             Planet.Tiles[0][0].getImage().fillRect(8, 32, 8, 8);
@@ -317,13 +411,13 @@ public class Rover extends Actor {
             Planet.Tiles[0][0].getImage().fillRect(21, 32, 8, 8);
         if (kaltCounter >= 3)
             Planet.Tiles[0][0].getImage().fillRect(34, 32, 8, 8);
-        
+
         Planet.Tiles[0][0].getImage().setColor(new Color(0, 0, 0));
         Planet.Tiles[0][0].getImage().drawRect(8, 32, 8, 8);
         Planet.Tiles[0][0].getImage().drawRect(21, 32, 8, 8);
         Planet.Tiles[0][0].getImage().drawRect(34, 32, 8, 8);
     }
-    
+
     public int getEnergie() {
         return Energie;
     }
@@ -355,6 +449,14 @@ public class Rover extends Actor {
     public void setSystemOK(boolean sysOK) {
         systemOK = sysOK;
     }
+    
+    public String getName() {
+        return name;
+    }
+    
+    public void setName(String name) {
+        this.name = name;
+    }
 
     class GroﬂesDisplay extends Actor {
         GreenfootImage bild;
@@ -376,10 +478,9 @@ public class Rover extends Actor {
 
         public void loeschen() {
             getImage().clear();
-            setImage("images/nachricht.png");
+            setImage("images/Uncool/nachricht.png");
         }
     }
-
     class KleinesDisplay extends Actor {
         GreenfootImage bild;
         int width;
@@ -400,7 +501,7 @@ public class Rover extends Actor {
 
         public void loeschen() {
             getImage().clear();
-            setImage("images/kleineNachricht.png");
+            setImage("images/Uncool/kleineNachricht.png");
         }
     }
 }

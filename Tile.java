@@ -4,7 +4,7 @@ public class Tile extends Actor {
 	private Integer temperatur;
 	private int x;
 	private int y;
-
+	private boolean hasLadestation = false;
 	public void act() {
 
 	}
@@ -26,6 +26,14 @@ public class Tile extends Actor {
 		world.addObject(this, x, y);
 	}
 
+	public boolean getHasLadestation() {
+		return hasLadestation;
+	}
+	
+	public void setHasLadestation(boolean b) {
+		hasLadestation = b;
+	}
+	
 	public Integer getTemperatur() {
 		return temperatur;
 	}
