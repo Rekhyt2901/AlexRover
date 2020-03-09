@@ -1,5 +1,6 @@
 import greenfoot.*; // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
     
+
 public class Rover extends Actor {
     protected int Energie = 100;
     protected Integer strecke = 0;
@@ -55,7 +56,7 @@ public class Rover extends Actor {
             if(Greenfoot.isKeyDown("g")) {
                 analysiereGestein();
             }
-            if (Greenfoot.isKeyDown("f")) {
+            if (Greenfoot.isKeyDown("t")) {
                 temporaryMethod();
             }
             delta--;
@@ -85,15 +86,19 @@ public class Rover extends Actor {
 
     public void aufwärmen(int zielTemperatur) {
         while (Planet.Tiles[getX()][getY()].getTemperatur() < zielTemperatur) {
-            Planet.Tiles[getX()][getY()].setTemperatur(Planet.Tiles[getX()][getY()].getTemperatur() + 1);
-            temperaturAnzeige.anzeigen(Planet.Tiles[getX()][getY()].getTemperatur().toString() + "°C");
-            Energie--;
-            energieAnzeige.anzeigen(getEnergie() + "%");
-            if (Planet.Tiles[getX()][getY()].getTemperatur() > -50)
-                Planet.Tiles[getX()][getY()].setImage("images/bodenCOOL.png");
-            if (Planet.Tiles[getX()][getY()].getTemperatur() > 0)
-                Planet.Tiles[getX()][getY()].setImage("images/bodenWarmCOOL.png");
-            Greenfoot.delay(3);
+            if (Energie > 0) {
+                Planet.Tiles[getX()][getY()].setTemperatur(Planet.Tiles[getX()][getY()].getTemperatur() + 1);
+                temperaturAnzeige.anzeigen(Planet.Tiles[getX()][getY()].getTemperatur().toString() + "°C");
+                Energie--;
+                energieAnzeige.anzeigen(getEnergie() + "%");
+                if (Planet.Tiles[getX()][getY()].getTemperatur() > -50)
+                    Planet.Tiles[getX()][getY()].setImage("images/bodenCOOL.png");
+                if (Planet.Tiles[getX()][getY()].getTemperatur() > 0)
+                    Planet.Tiles[getX()][getY()].setImage("images/bodenWarmCOOL.png");
+                Greenfoot.delay(3);
+            } else {
+                return;
+            }
         }
         kaltCounter = 0;
         systemOK = true;

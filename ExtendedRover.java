@@ -13,8 +13,7 @@ public class ExtendedRover extends Rover {
     }
 
     public void fahre(int x) {
-
-        for (x = x; x > 0; x--) {
+        for (int i = x; i > 0; i--) {
             fahre();
         }
     }
