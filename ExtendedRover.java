@@ -17,7 +17,6 @@ public class ExtendedRover extends Rover {
             fahre();
         }
     }
-    
     public void umrundenRechts() {
         drehe("rechts");
         fahre();
